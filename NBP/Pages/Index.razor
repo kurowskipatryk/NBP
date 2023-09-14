@@ -1,0 +1,11 @@
+﻿@page "/"
+
+<button @onclick="GetTable">Get</button>
+
+
+<MudSelect T="string" ValueChanged="Change" Value="@type" Label="Rodzaj waluty" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter">
+    <MudSelectItem Value="@("A")" />
+    <MudSelectItem Value="@("B")" />
+    <MudSelectItem Value="@("C")" />
+</MudSelect>
+
