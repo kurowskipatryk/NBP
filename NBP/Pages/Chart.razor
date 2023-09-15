@@ -1,18 +1,31 @@
 ﻿@page "/Chart"
 
 <NBP.Components.SelectTable OnSelect="Change"></NBP.Components.SelectTable>
-<div class="col-4 col-xl-2">
-
+<div class="col-12">
     @if (NBPTable.Table != null)
     {
-
-        <MudSelect T="string" ValueChanged="ChangeCur" Label="Code" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter">
-            @foreach (var item in NBPTable.Rates)
+        <div class="d-flex flex-row flex-nowrap">
+            @for (int i = 0; i < numberOfCurr; i++)
             {
-                <MudSelectItem Value="item.Code"></MudSelectItem>
+                <div class="col-2">
+                    <MudSelect T="string" ValueChanged="(x)=>ChangeCur(x, i)" Label="Code" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter">
+                        @foreach (var item in NBPTable.Rates)
+                        {
+                            <MudSelectItem Value="item.Code"></MudSelectItem>
+                        }
+                    </MudSelect>
+                </div>
             }
-        </MudSelect>
-        <MudFab Color="Color.Primary" OnClick="AddCur" StartIcon="@Icons.Material.Filled.Add" />
+            @if (numberOfCurr > 1 && numberOfCurr <= 6)
+            {
+                <MudIconButton Icon="@Icons.Material.Filled.Delete" aria-label="delete" OnClick="RemoveCur"></MudIconButton>
+            }
+            @if (numberOfCurr <= 5)
+            {
+
+                <MudFab Color="Color.Primary" OnClick="AddCur" StartIcon="@Icons.Material.Filled.Add" />
+            }
+        </div>
     }
     <MudDateRangePicker Label="Select date" Editable="true" AutoClose="true" TextChanged="SelectedDate" @bind-DateRange="_dateRange" @ref="_picker" />
 </div>

@@ -12,7 +12,7 @@ namespace NBP.Pages
     {
 
         [Inject] INBPClient _nbpClient { get; set; }
-        string type ;
+        string type;
         private NBPTable NBPTable = new NBPTable();
         private LineChart lineChart = default!;
         private LineChartOptions lineChartOptions = default!;
@@ -35,17 +35,28 @@ namespace NBP.Pages
             await GetTable();
             if (NBPTable.Table != null && code != null)
             {
-                await FillChart(code);
+                await FillChart(code, 0);
             }
         }
 
         string code;
-        private async Task ChangeCur(string selectedCode)
+        private async Task ChangeCur(string selectedCode, int i)
         {
             code = selectedCode;
-            await FillChart(code);
+            await FillChart(code, i);
         }
-        private async Task FillChart(string code)
+
+        private string GetRandomColor()
+        {
+            Random rnd = new Random();
+
+            var color1 = rnd.Next(250);
+            var color2 = rnd.Next(250);
+            var color3 = rnd.Next(250);
+
+            return $"rgba({color1}, {color2}, {color3})";
+        }
+        private async Task FillChart(string code, int i)
         {
             var res = await _nbpClient.GetLastCurrencies(type, code, _dateRange.Start.Value, _dateRange.End.Value);
 
@@ -66,18 +77,22 @@ namespace NBP.Pages
             var colors = ColorBuilder.CategoricalTwelveColors;
             var datasets = new List<IChartDataset>();
 
+
+
+
             if (type == "C")
             {
-
+                var rnd1 = GetRandomColor();
+                var rnd2 = GetRandomColor();
                 var dataset1 = new LineChartDataset
                 {
                     Label = $"{code} BID",
                     Data = bid,
-                    BackgroundColor = new List<string> { colors[0] },
-                    BorderColor = new List<string> { colors[0] },
+                    BackgroundColor = new List<string> { rnd1 },
+                    BorderColor = new List<string> { rnd1 },
                     BorderWidth = new List<double> { 2 },
                     HoverBorderWidth = new List<double> { 4 },
-                    PointBackgroundColor = new List<string> { colors[0] },
+                    PointBackgroundColor = new List<string> { rnd1 },
                     //PointRadius = new List<int> { 0 }, // hide points
                     PointHoverRadius = new List<int> { 4 }
                 };
@@ -87,11 +102,11 @@ namespace NBP.Pages
                 {
                     Label = $"{code} ASK",
                     Data = ask,
-                    BackgroundColor = new List<string> { colors[1] },
-                    BorderColor = new List<string> { colors[1] },
+                    BackgroundColor = new List<string> { rnd2 },
+                    BorderColor = new List<string> { rnd2 },
                     BorderWidth = new List<double> { 2 },
                     HoverBorderWidth = new List<double> { 4 },
-                    PointBackgroundColor = new List<string> { colors[1] },
+                    PointBackgroundColor = new List<string> { rnd2 },
                     //PointRadius = new List<int> { 0 }, // hide points
                     PointHoverRadius = new List<int> { 4 }
                 };
@@ -99,26 +114,38 @@ namespace NBP.Pages
             }
             else
             {
+                var rnd1 = GetRandomColor();
                 var dataset1 = new LineChartDataset
                 {
-                    Label = code,
+                    Label = $"{code} MID",
                     Data = mid,
-                    BackgroundColor = new List<string> { colors[0] },
-                    BorderColor = new List<string> { colors[0] },
+                    BackgroundColor = new List<string> { rnd1 },
+                    BorderColor = new List<string> { rnd1 },
                     BorderWidth = new List<double> { 2 },
                     HoverBorderWidth = new List<double> { 4 },
-                    PointBackgroundColor = new List<string> { colors[0] },
+                    PointBackgroundColor = new List<string> { rnd1 },
                     //PointRadius = new List<int> { 0 }, // hide points
                     PointHoverRadius = new List<int> { 4 }
                 };
                 datasets.Add(dataset1);
             }
 
-            chartData = new ChartData
+            if (i > 1 && chartData != null)
             {
-                Labels = dates,
-                Datasets = datasets
-            };
+                foreach (var item in datasets)
+                {
+                    chartData.Datasets.Add(item);
+                }
+            }
+            else
+            {
+
+                chartData = new ChartData
+                {
+                    Labels = dates,
+                    Datasets = datasets
+                };
+            }
 
             lineChartOptions = new();
             lineChartOptions.Responsive = true;
@@ -136,17 +163,32 @@ namespace NBP.Pages
         private async Task SelectedDate(string value)
         {
             var a = value.Split(";");
-            _dateRange.Start =DateTime.Parse( a[0].Substring(1));
-            _dateRange.End =DateTime.Parse( a[1].Substring(0, a[1].Length-1));
+            _dateRange.Start = DateTime.Parse(a[0].Substring(1));
+            _dateRange.End = DateTime.Parse(a[1].Substring(0, a[1].Length - 1));
             if (NBPTable.Table != null && code != null)
             {
-                await FillChart(code);
+                await FillChart(code, 0);
             }
         }
-
+        int numberOfCurr = 1;
         private async Task AddCur()
         {
+            numberOfCurr++;
+        }
 
+        private async Task RemoveCur()
+        {
+            if (type == "C")
+            {
+                chartData.Datasets.RemoveAt(chartData.Datasets.Count -1 );
+                chartData.Datasets.RemoveAt(chartData.Datasets.Count - 1);
+            }
+            else
+            {
+                chartData.Datasets.RemoveAt(chartData.Datasets.Count-1 );
+            }
+            numberOfCurr--;
+            await lineChart.UpdateAsync(chartData, lineChartOptions);
         }
     }
 }
