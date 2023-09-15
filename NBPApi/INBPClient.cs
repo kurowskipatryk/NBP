@@ -10,5 +10,6 @@ namespace NBPApi
     public interface INBPClient
     {
         Task<NBPTable> GetCurrency(string type);
+        Task<List<RateSingleCur>> GetLastCurrencies(string tableType, string code, DateTime startDate, DateTime endDate);
     }
 }

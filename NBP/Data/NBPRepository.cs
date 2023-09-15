@@ -15,7 +15,7 @@ namespace NBP.Data
 
         public async Task<NBPTable> GetNBPTable(string type)
         {
-            var result = await _appDbContext.Tables.FirstOrDefaultAsync(x=>x.Table == type);
+            var result = await _appDbContext.Tables.FirstOrDefaultAsync(x => x.Table == type);
             return result;
         }
 
@@ -25,12 +25,20 @@ namespace NBP.Data
 
             if (result != null)
             {
-                _appDbContext.Tables.Remove(result);
+                if (result.EffectiveDate < table.EffectiveDate)
+                {
+                    _appDbContext.Tables.Remove(result);
+                    await _appDbContext.SaveChangesAsync();
+                    await _appDbContext.Tables.AddAsync(table);
+                    await _appDbContext.SaveChangesAsync();
+                }
+            }
+            else
+            {
+                await _appDbContext.Tables.AddAsync(table);
                 await _appDbContext.SaveChangesAsync();
             }
 
-            await _appDbContext.Tables.AddAsync(table);
-            await _appDbContext.SaveChangesAsync();
         }
     }
 }

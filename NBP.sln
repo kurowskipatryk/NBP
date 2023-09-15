@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32929.385
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NBP", "NBP\NBP.csproj", "{E45BD487-1346-43DF-BCF0-83E6CD777DD1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NBP", "NBP\NBP.csproj", "{E45BD487-1346-43DF-BCF0-83E6CD777DD1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Models", "Models\Models.csproj", "{4315BD0B-CC9D-49F1-BB1E-6F85534D416D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Models", "Models\Models.csproj", "{4315BD0B-CC9D-49F1-BB1E-6F85534D416D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NBPApi", "NBPApi\NBPApi.csproj", "{96104FEC-9E07-453E-A34E-118A2E8602BE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NBPApi", "NBPApi\NBPApi.csproj", "{96104FEC-9E07-453E-A34E-118A2E8602BE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
