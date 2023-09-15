@@ -151,7 +151,7 @@ namespace NBP.Pages
             lineChartOptions.Responsive = true;
             lineChartOptions.Interaction = new Interaction { Mode = InteractionMode.Index };
 
-            lineChartOptions.Scales.Y.Title.Text = "Price";
+            lineChartOptions.Scales.Y.Title.Text = "Price zł";
             lineChartOptions.Scales.Y.Title.Display = true;
 
             await lineChart.UpdateAsync(chartData, lineChartOptions);
@@ -178,17 +178,21 @@ namespace NBP.Pages
 
         private async Task RemoveCur()
         {
-            if (type == "C")
+            if (chartData != null)
             {
-                chartData.Datasets.RemoveAt(chartData.Datasets.Count -1 );
-                chartData.Datasets.RemoveAt(chartData.Datasets.Count - 1);
+
+                if (type == "C")
+                {
+                    chartData.Datasets.RemoveAt(chartData.Datasets.Count - 1);
+                    chartData.Datasets.RemoveAt(chartData.Datasets.Count - 1);
+                }
+                else
+                {
+                    chartData.Datasets.RemoveAt(chartData.Datasets.Count - 1);
+                }
+                numberOfCurr--;
+                await lineChart.UpdateAsync(chartData, lineChartOptions);
             }
-            else
-            {
-                chartData.Datasets.RemoveAt(chartData.Datasets.Count-1 );
-            }
-            numberOfCurr--;
-            await lineChart.UpdateAsync(chartData, lineChartOptions);
         }
     }
 }
