@@ -19,6 +19,7 @@ namespace NBP.Pages
         private ChartData chartData = default!;
         private DateRange _dateRange = new DateRange(DateTime.Now.Date.AddMonths(-1), DateTime.Now.Date);
         private MudDateRangePicker _picker;
+        private MudSelect<string> _mudSelect;
 
         //protected override async Task OnInitializedAsync()
         //{
@@ -31,6 +32,17 @@ namespace NBP.Pages
 
         private async Task Change(string selectedType)
         {
+            if (chartData != null)
+            {
+                chartData.Datasets.Clear();
+                chartData.Labels.Clear();
+                await lineChart.UpdateAsync(chartData, lineChartOptions);
+                numberOfCurr = 1;
+                code = "";
+                _mudSelect.Clear();
+                _mudSelect.Text = "";
+            }
+
             type = selectedType;
             await GetTable();
             if (NBPTable.Table != null && code != null)

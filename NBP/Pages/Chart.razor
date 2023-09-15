@@ -8,7 +8,7 @@
             @for (int i = 0; i < numberOfCurr; i++)
             {
                 <div class="col-12 col-xxl-2 mr-xl-3">
-                    <MudSelect T="string" ValueChanged="(x)=>ChangeCur(x, i)" Label="Code" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter">
+                    <MudSelect T="string" @ref="_mudSelect" ValueChanged="(x)=>ChangeCur(x, i)" Label="Code" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter">
                         @foreach (var item in NBPTable.Rates)
                         {
                             <MudSelectItem Value="item.Code"></MudSelectItem>
