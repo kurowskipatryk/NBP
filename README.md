@@ -7,4 +7,4 @@ It is also used to draw a graph for various currencies.
 
 The program is written in Blazor and the database in MSSQL.
 
-To run the program you need to change the database server in the appsetting.json file and perform a migration.
+To run the program you need to change the database server in the <strong> appsetting.json</strong> file and perform a migration.
